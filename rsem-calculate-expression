@@ -85,6 +85,7 @@ my $bowtie2_sensitivity_level = "sensitive"; # must be one of "very_fast", "fast
 
 my $star = 0;
 my $star_path = "";
+my $star_extra = "";
 my $star_gzipped_read_file = 0;
 my $star_bzipped_read_file = 0;
 my $star_output_genome_bam = 0;
@@ -152,7 +153,8 @@ GetOptions("keep-intermediate-files" => \$keep_intermediate_files,
     "star-path=s" => \$star_path,
     "star-gzipped-read-file" => \$star_gzipped_read_file,
     "star-bzipped-read-file" => \$star_bzipped_read_file,
-    "star-output-genome-bam" => \$star_output_genome_bam,      
+    "star-output-genome-bam" => \$star_output_genome_bam,
+    "star-extra=s" => \$star_extra, 
     "hisat2-hca" => \$hisat2_hca,
     "hisat2-path=s" => \$hisat2_path,
     "fragment-length-min=i" => \$minL,
@@ -496,6 +498,10 @@ if (!$is_alignment) {
             $command .= " --readFilesCommand zcat ";
         } elsif ( $star_bzipped_read_file ) {
             $command .= " --readFilesCommand bzip2 -c ";
+        }
+
+        if ( $star_extra ) {
+            $command .= " $star_extra ";
         }
 
         if ( $read_type == 0 || $read_type == 1 ) {
